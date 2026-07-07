@@ -121,6 +121,23 @@ function initCardSpotlight() {
       
       card.style.setProperty('--x', `${x}px`);
       card.style.setProperty('--y', `${y}px`);
+      
+      // 3D Tilt calculation
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -5; // max 5deg tilt
+      const rotateY = ((x - centerX) / centerX) * 5; // max 5deg tilt
+      
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale3d(1.02, 1.02, 1.02)`;
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale3d(1, 1, 1)`;
+      card.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)';
+    });
+    
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'none'; // Disable transition for 1:1 mouse tracking
     });
   });
 }
@@ -345,15 +362,32 @@ function initTerminalWidget() {
       // Execute command response
       if (cmd === 'clear') {
         history.innerHTML = '';
-      } else if (commandResponses[cmd]) {
-        const responseDiv = document.createElement('div');
-        responseDiv.innerHTML = commandResponses[cmd]();
-        history.appendChild(responseDiv);
       } else {
-        const errorLine = document.createElement('div');
-        errorLine.className = 'terminal-line text-error';
-        errorLine.innerHTML = `command not found: ${rawCmd}. Type <span class="text-highlight">'help'</span> for instructions.`;
-        history.appendChild(errorLine);
+        const responseHTML = commandResponses[cmd] 
+          ? commandResponses[cmd]() 
+          : `<div class="terminal-line text-error">command not found: ${rawCmd}. Type <span class="text-highlight">'help'</span> for instructions.</div>`;
+        
+        // Create a temporary container to parse the HTML lines
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = responseHTML;
+        
+        const lines = Array.from(tempDiv.children);
+        
+        // Append each line with a staggered delay for a "typing/processing" feel
+        lines.forEach((line, index) => {
+          line.style.opacity = '0';
+          line.style.transform = 'translateX(-10px)';
+          line.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+          history.appendChild(line);
+          
+          setTimeout(() => {
+            line.style.opacity = '1';
+            line.style.transform = 'translateX(0)';
+            // Auto scroll as lines appear
+            const body = document.getElementById('terminal-body');
+            if (body) body.scrollTop = body.scrollHeight;
+          }, index * 120 + 50); // Stagger by 120ms
+        });
       }
 
       // Auto scroll
