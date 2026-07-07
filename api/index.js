@@ -67,24 +67,28 @@ app.post('/api/contact', (req, res) => {
     timestamp: new Date().toISOString()
   };
 
-  // 1. Read and backup messages locally to JSON database
+  // 1. Read and backup messages locally to JSON database (skipped on Vercel read-only filesystem)
   let messages = [];
-  if (fs.existsSync(MESSAGES_FILE)) {
-    try {
-      const fileData = fs.readFileSync(MESSAGES_FILE, 'utf8');
-      messages = JSON.parse(fileData);
-    } catch (err) {
-      console.error('Error reading messages file:', err);
+  if (!process.env.VERCEL) {
+    if (fs.existsSync(MESSAGES_FILE)) {
+      try {
+        const fileData = fs.readFileSync(MESSAGES_FILE, 'utf8');
+        messages = JSON.parse(fileData);
+      } catch (err) {
+        console.error('Error reading messages file:', err);
+      }
     }
-  }
 
-  messages.push(newMessage);
+    messages.push(newMessage);
 
-  try {
-    fs.writeFileSync(MESSAGES_FILE, JSON.stringify(messages, null, 2), 'utf8');
-    console.log(`[Backend] Message logged locally from: ${name} <${email}>`);
-  } catch (err) {
-    console.error('Error saving message to disk:', err);
+    try {
+      fs.writeFileSync(MESSAGES_FILE, JSON.stringify(messages, null, 2), 'utf8');
+      console.log(`[Backend] Message logged locally from: ${name} <${email}>`);
+    } catch (err) {
+      console.error('Error saving message to disk:', err);
+    }
+  } else {
+    console.log(`[Backend] Vercel environment detected. Skipping local filesystem database logging.`);
   }
 
   // 2. Forward the message to Priyam's email if SMTP is configured
