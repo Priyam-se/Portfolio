@@ -122,9 +122,13 @@ app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`\n==================================================`);
-  console.log(`  [Express Server] Running on http://localhost:${PORT}`);
-  console.log(`  Serving static assets and exposing API routes.`);
-  console.log(`==================================================\n`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`\n==================================================`);
+    console.log(`  [Express Server] Running on http://localhost:${PORT}`);
+    console.log(`  Serving static assets and exposing API routes.`);
+    console.log(`==================================================\n`);
+  });
+}
+
+module.exports = app;
