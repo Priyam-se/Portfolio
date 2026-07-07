@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfolio of Priyam - MERN Stack Developer. Crafting robust, scalable web applications and clean user experiences.">
+  <title>Priyam | MERN Stack Developer</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Custom Glow Cursor -->
+  <div class="custom-cursor" id="custom-cursor"></div>
+  <div class="custom-cursor-glow" id="custom-cursor-glow"></div>
+
+  <!-- Header / Navigation -->
+  <header class="header">
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <span class="logo-accent">&lt;</span>Priyam<span class="logo-accent">/&gt;</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#hero" class="nav-link active">Home</a>
+        <a href="#works" class="nav-link">Works</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#skills" class="nav-link">Codex</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+      <button class="nav-toggle" aria-label="Toggle menu" id="nav-toggle">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <nav class="mobile-nav-links">
+      <a href="#hero" class="mobile-link">Home</a>
+      <a href="#works" class="mobile-link">Works</a>
+      <a href="#about" class="mobile-link">About</a>
+      <a href="#skills" class="mobile-link">Codex</a>
+      <a href="#contact" class="mobile-link">Contact</a>
+    </nav>
+  </div>
+
+  <main>
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+      <!-- Background Interactive Canvas -->
+      <canvas id="particle-canvas" class="particle-canvas"></canvas>
+      <div class="hero-bg-glow"></div>
+      
+      <div class="hero-content reveal">
+        <p class="hero-intro">Welcome to my workspace</p>
+        <h1 class="hero-title">
+          I am a <span class="typewriter" id="typewriter" data-words='["Full Stack Developer.", "MERN Specialist.", "UI/UX Designer."]'></span>
+        </h1>
+        <p class="hero-subtitle">
+          Building high-performance web applications using the MERN stack. I focus on creating seamless user experiences, responsive layouts, and robust, secure APIs. Based in Odisha, India.
+        </p>
+        <div class="hero-ctas">
+          <a href="#works" class="btn btn-primary">
+            Explore My Works
+            <svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18">
+              <path fill="currentColor" d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+            </svg>
+          </a>
+          <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+        </div>
+      </div>
+      <div class="hero-scroll-indicator">
+        <div class="mouse">
+          <div class="wheel"></div>
+        </div>
+        <span>Scroll Down</span>
+      </div>
+    </section>
+
+    <!-- Works Section -->
+    <section id="works" class="section works-section">
+      <div class="section-header reveal">
+        <h2 class="section-title">Selected Works</h2>
+        <p class="section-subtitle">A showcase of full-stack engineering and custom MERN applications.</p>
+      </div>
+
+      <div class="works-grid" id="works-grid">
+        <!-- Work Item 1 (DevCanvas) -->
+        <article class="work-card reveal">
+          <div class="card-glow"></div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="card-tag">React / Socket.io / MongoDB</span>
+              <span class="card-status wip">WIP</span>
+            </div>
+            <h3 class="card-title">DevCanvas</h3>
+            <p class="card-description">
+              A real-time collaborative design workspace and whiteboarding application. Powered by React on the frontend, and Node.js/Express with Socket.io on the backend to synchronize state updates instantly between multiple connected users, persistent in MongoDB.
+            </p>
+            <div class="card-links">
+              <span class="card-link-disabled" title="This project is currently under construction">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                  <path fill="currentColor" d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
+                </svg>
+                <span>Not Built Yet</span>
+              </span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Work Item 2 (secure-notes-app) -->
+        <article class="work-card reveal">
+          <div class="card-glow"></div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="card-tag">MERN Stack / Cryptography</span>
+              <span class="card-status building">Building</span>
+            </div>
+            <h3 class="card-title">secure-notes-app</h3>
+            <p class="card-description">
+              An end-to-end encrypted note-taking application. Implements client-side decryption, secure JWT and cookie-based authentication, rich markdown editing, and cloud synchronization built on Express, Node.js, and MongoDB.
+            </p>
+            <div class="card-links">
+              <a href="https://github.com/Priyam-SE/secure-notes-app" target="_blank" class="card-link" aria-label="View Github Repository">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                  <path fill="currentColor" d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
+                </svg>
+                <span>Source</span>
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section about-section">
+      <div class="about-container">
+        <div class="about-text reveal">
+          <h2 class="section-title">The Engineer behind the Code</h2>
+          <p class="about-paragraph highlight">
+            I design web applications unified from user interface to database schema.
+          </p>
+          <p class="about-paragraph">
+            Hi, I'm Priyam, a Full Stack Developer based in Odisha, India. I specialize in building complete web environments using the MERN stack (MongoDB, Express, React, and Node.js). I like bringing complex web architectures to life through clean REST endpoints, robust server systems, and highly interactive user interfaces.
+          </p>
+          <p class="about-paragraph">
+            My engineering philosophy centers on clean code patterns, optimized databases, and seamless state management. I love designing APIs that are intuitive, secure, and fast.
+          </p>
+          <div class="about-quote">
+            <p>"Simplicity is the ultimate sophistication in software design."</p>
+          </div>
+        </div>
+        <div class="about-visual reveal">
+          <div class="visual-stack">
+            <div class="visual-box box-1"></div>
+            <div class="visual-box box-2"></div>
+            <div class="visual-card">
+              <div class="visual-header">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+              </div>
+              <div class="visual-terminal" id="terminal-widget">
+                <div class="terminal-body" id="terminal-body">
+                  <div class="terminal-line text-system">Welcome. Type <span class="text-highlight">'help'</span> for a list of command queries.</div>
+                  <div id="terminal-history"></div>
+                  <div class="terminal-input-line">
+                    <span class="terminal-prompt">priyam-se:~$</span>
+                    <input type="text" id="terminal-input" autocomplete="off" spellcheck="false" aria-label="Terminal input">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Codex Section -->
+    <section id="skills" class="section skills-section">
+      <div class="section-header reveal">
+        <h2 class="section-title">The Codex</h2>
+        <p class="section-subtitle">Proficiencies aligned across full-stack development technologies.</p>
+      </div>
+
+      <div class="skills-grid">
+        <!-- Sphere 1: Frontend -->
+        <div class="skills-category reveal">
+          <div class="category-header">
+            <svg class="category-icon" viewBox="0 0 24 24" width="24" height="24">
+              <path fill="currentColor" d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
+            </svg>
+            <h3>Frontend Technologies</h3>
+          </div>
+          <ul class="skills-list">
+            <li class="skill-item">
+              <div class="skill-info">
+                <span>React.js / Redux Toolkit</span>
+                <span>Advanced</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 90%"></div></div>
+              <div class="skill-specs">Hooks, Redux Slices, Context API, Virtual DOM</div>
+            </li>
+            <li class="skill-item">
+              <div class="skill-info">
+                <span>HTML5 / CSS3 / Vanilla JS</span>
+                <span>Expert</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 95%"></div></div>
+              <div class="skill-specs">Flexbox/Grid, ES6+ Modules, Responsive Design, Custom SVGs</div>
+            </li>
+            <li class="skill-item">
+              <div class="skill-info">
+                <span>TailwindCSS / Bootstrap</span>
+                <span>Advanced</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 88%"></div></div>
+              <div class="skill-specs">Utility first, Config customizations, Dark mode, Custom plugins</div>
+            </li>
+            <li class="skill-item">
+              <div class="skill-info">
+                <span>UI/UX & Web Performance</span>
+                <span>Proficient</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 82%"></div></div>
+              <div class="skill-specs">Wireframing, Accessibility, Performance tuning, Asset loading</div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Sphere 2: Backend -->
+        <div class="skills-category reveal">
+          <div class="category-header">
+            <svg class="category-icon" viewBox="0 0 24 24" width="24" height="24">
+              <path fill="currentColor" d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.07 19.66 10.47 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
+            </svg>
+            <h3>Backend & Database</h3>
+          </div>
+          <ul class="skills-list">
+            <li class="skill-item">
+              <div class="skill-info">
+                <span>Node.js / Express.js</span>
+                <span>Advanced</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 90%"></div></div>
+              <div class="skill-specs">Express router, Middleware pipelines, JWT auth, Error loggers</div>
+            </li>
+            <li class="skill-item">
+              <div class="skill-info">
+                <span>MongoDB / Mongoose Schema</span>
+                <span>Advanced</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 88%"></div></div>
+              <div class="skill-specs">Validation hooks, DB references, Aggregations, Index optimization</div>
+            </li>
+            <li class="skill-item">
+              <div class="skill-info">
+                <span>RESTful APIs / Socket.io</span>
+                <span>Advanced</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 85%"></div></div>
+              <div class="skill-specs">Route versioning, WebSockets sync, JSON response models</div>
+            </li>
+            <li class="skill-item">
+              <div class="skill-info">
+                <span>Git / Docker / Deployment</span>
+                <span>Intermediate</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 75%"></div></div>
+              <div class="skill-specs">Git Branching, Container management, PM2 server runner, Linux VPS config</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section contact-section">
+      <div class="contact-container reveal">
+        <div class="contact-info">
+          <h2 class="section-title">Communicate</h2>
+          <p class="contact-desc">
+            Want to collaborate on a full-stack MERN application, discuss API structures, or simply connect? Send a transmission.
+          </p>
+          <div class="contact-methods">
+            <div class="contact-method">
+              <svg viewBox="0 0 24 24" width="20" height="20">
+                <path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+              </svg>
+              <span>priyampratyushpanda@gmail.com</span>
+            </div>
+            <div class="contact-method">
+              <svg viewBox="0 0 24 24" width="20" height="20">
+                <path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+              <span>Odisha, India</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form-container">
+          <form class="contact-form" id="contact-form">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" required placeholder="Your name...">
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" required placeholder="your.email@example.com">
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" rows="5" required placeholder="Write your message here..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Send Transmission</button>
+          </form>
+          <!-- Custom form response output -->
+          <div class="form-feedback-console" id="form-feedback-console"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2026 Priyam. All rights reserved.</p>
+      <p class="footer-sub">Designed in collaboration with ENI</p>
+    </div>
+  </footer>
+
+  <!-- JS Scripts -->
+  <script src="script.js"></script>
+</body>
+</html>
