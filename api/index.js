@@ -52,7 +52,7 @@ if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
 const MESSAGES_FILE = path.join(__dirname, '..', 'messages.json');
 
 // POST endpoint to handle form submissions
-app.post('/api/contact', (req, res) => {
+app.post('/api/contact', async (req, res) => {
   const { name, email, message } = req.body;
 
   if (!name || !email || !message) {
@@ -100,24 +100,28 @@ app.post('/api/contact', (req, res) => {
       text: `You received a new message on your portfolio contact form:\n\nSender: ${name}\nEmail: ${email}\n\nMessage:\n${message}\n\n---\nLogged locally at: ${newMessage.timestamp}`
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('[Email Error] Failed to forward email:', error);
-      } else {
-        console.log('[Email Success] Message forwarded successfully to priyampratyushpanda@gmail.com:', info.response);
-      }
-    });
-
-    return res.status(200).json({
-      success: true,
-      message: 'Transmission successfully logged locally and dispatched to email.'
-    });
+    try {
+      // Must await sendMail to prevent Vercel from freezing the container before it sends
+      const info = await transporter.sendMail(mailOptions);
+      console.log('[Email Success] Message forwarded successfully:', info.response);
+      return res.status(200).json({
+        success: true,
+        message: 'Transmission successfully dispatched to email.'
+      });
+    } catch (error) {
+      console.error('[Email Error] Failed to forward email:', error);
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to forward email transmission.',
+        details: error.message
+      });
+    }
   }
 
   // Local-only response
   return res.status(200).json({
     success: true,
-    message: 'Transmission logged locally. (Email dispatch inactive: Configure .env to enable email forwarding)'
+    message: 'Transmission logged locally. (Email dispatch inactive: Configure environment variables to enable forwarding)'
   });
 });
 
