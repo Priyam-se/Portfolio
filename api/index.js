@@ -11,10 +11,10 @@ app.use(cors());
 app.use(express.json());
 
 // Serve static frontend files (index.html, style.css, script.js)
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, '..')));
 
 // Custom package-free .env loader
-const envPath = path.join(__dirname, '.env');
+const envPath = path.join(__dirname, '..', '.env');
 if (fs.existsSync(envPath)) {
   try {
     const envContent = fs.readFileSync(envPath, 'utf8');
@@ -49,7 +49,7 @@ if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
   console.log('[Email] Emails will NOT be forwarded. Running in local JSON-log fallback mode.');
 }
 
-const MESSAGES_FILE = path.join(__dirname, 'messages.json');
+const MESSAGES_FILE = path.join(__dirname, '..', 'messages.json');
 
 // POST endpoint to handle form submissions
 app.post('/api/contact', (req, res) => {
@@ -119,7 +119,7 @@ app.post('/api/contact', (req, res) => {
 
 // Fallback to serve index.html for undefined routes
 app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
 if (require.main === module) {
