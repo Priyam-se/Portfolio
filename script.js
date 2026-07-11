@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initParticleCanvas();
   initTerminalWidget();
   initContactFormConsole();
+  initMagneticButtons();
 });
 
 /**
@@ -151,7 +152,6 @@ function initScrollAnimations() {
   const navLinks = document.querySelectorAll('.nav-link');
   const progressBars = document.querySelectorAll('.skill-progress');
 
-  // Reveal observer
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -160,7 +160,17 @@ function initScrollAnimations() {
     });
   }, { threshold: 0.15 });
 
-  reveals.forEach(el => revealObserver.observe(el));
+  reveals.forEach(el => {
+    // Add staggered delay index for elements inside grids
+    if (el.parentElement) {
+      const siblings = Array.from(el.parentElement.querySelectorAll('.reveal'));
+      const localIndex = siblings.indexOf(el);
+      if (localIndex > -1) {
+        el.style.setProperty('--reveal-idx', localIndex);
+      }
+    }
+    revealObserver.observe(el);
+  });
 
   // Active Nav link observer
   const navObserver = new IntersectionObserver((entries) => {
@@ -232,13 +242,18 @@ function initParticleCanvas() {
   });
 
   // Construct particle model
+  const colors = ['#d48c6a', '#8b9c8c', '#e2e8f0', '#ffffff'];
+  
   class Particle {
     constructor() {
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height;
-      this.vx = (Math.random() - 0.5) * 0.4;
-      this.vy = (Math.random() - 0.5) * 0.4;
-      this.radius = Math.random() * 2 + 1;
+      this.vx = (Math.random() - 0.5) * 0.6;
+      this.vy = (Math.random() - 0.5) * 0.6;
+      this.radius = Math.random() * 2.5 + 1;
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      this.originalVx = this.vx;
+      this.originalVy = this.vy;
     }
 
     update() {
@@ -267,8 +282,10 @@ function initParticleCanvas() {
     draw() {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(212, 140, 106, 0.45)';
+      ctx.fillStyle = this.color;
+      ctx.globalAlpha = 0.6;
       ctx.fill();
+      ctx.globalAlpha = 1.0;
     }
   }
 
@@ -292,13 +309,15 @@ function initParticleCanvas() {
         const dist = Math.hypot(dx, dy);
 
         if (dist < connectionDistance) {
-          const alpha = (connectionDistance - dist) / connectionDistance * 0.15;
-          ctx.strokeStyle = `rgba(139, 156, 140, ${alpha})`;
-          ctx.lineWidth = 0.8;
+          const alpha = (connectionDistance - dist) / connectionDistance * 0.25;
+          ctx.strokeStyle = particles[i].color;
+          ctx.globalAlpha = alpha;
+          ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
           ctx.stroke();
+          ctx.globalAlpha = 1.0;
         }
       }
     }
@@ -318,38 +337,84 @@ function initTerminalWidget() {
   
   if (!terminal || !input || !history) return;
 
+  // Update custom block cursor position based on input length
+  input.addEventListener('input', () => {
+    input.parentElement.style.setProperty('--caret-pos', input.value.length);
+  });
+
   // Make terminal clickable to focus input
   terminal.addEventListener('click', () => input.focus());
 
   const commandResponses = {
-    help: () => `
-      <div class="terminal-line text-system">Available commands:</div>
-      <div class="terminal-line">  <span class="text-highlight">bio</span>      - Display professional developer bio</div>
-      <div class="terminal-line">  <span class="text-highlight">stack</span>    - Show technologies and coding stack</div>
-      <div class="terminal-line">  <span class="text-highlight">origin</span>   - Display location / origin details</div>
-      <div class="terminal-line">  <span class="text-highlight">contact</span>  - Print primary contact channels</div>
-      <div class="terminal-line">  <span class="text-highlight">clear</span>    - Clear terminal shell console log</div>
-    `,
-    bio: () => `
-      <div class="terminal-line">Priyam is a Full Stack Developer based in Odisha, India. He builds clean, robust interfaces and optimized backend systems using the MERN stack. Believes in unified design schemas and fast API architectures.</div>
-    `,
-    stack: () => `
-      <div class="terminal-line text-system">MongoDB, Express.js, React.js, Node.js, REST APIs, Socket.io, Git, Docker.</div>
-    `,
-    origin: () => `
-      <div class="terminal-line">Location: <span class="text-highlight">Odisha, India</span>. Known for ancient stone architecture, gorgeous coastlines, and pristine backend logic.</div>
-    `,
-    contact: () => `
-      <div class="terminal-line">Email: <span class="text-highlight">priyampratyushpanda@gmail.com</span></div>
-      <div class="terminal-line">GitHub: <a href="https://github.com/Priyam-SE" target="_blank" style="color: var(--accent-secondary); text-decoration: underline;">github.com/Priyam-SE</a></div>
-    `
+    help: [
+      '<div class="terminal-line text-system">Available commands:</div>',
+      '<div class="terminal-line">  <span class="text-highlight">bio</span>      - Display professional developer bio</div>',
+      '<div class="terminal-line">  <span class="text-highlight">stack</span>    - Show technologies and coding stack</div>',
+      '<div class="terminal-line">  <span class="text-highlight">origin</span>   - Display location / origin details</div>',
+      '<div class="terminal-line">  <span class="text-highlight">contact</span>  - Print primary contact channels</div>',
+      '<div class="terminal-line">  <span class="text-highlight">whoami</span>   - Identify current shell user</div>',
+      '<div class="terminal-line">  <span class="text-highlight">sudo</span>     - Superuser execution</div>',
+      '<div class="terminal-line">  <span class="text-highlight">clear</span>    - Clear terminal shell console log</div>'
+    ],
+    bio: [
+      '<div class="terminal-line">Priyam is a Full Stack Developer based in Odisha, India. He builds clean, robust interfaces and optimized backend systems using the MERN stack. Believes in unified design schemas and fast API architectures.</div>'
+    ],
+    stack: [
+      '<div class="terminal-line text-system">MongoDB, Express.js, React.js, Node.js, REST APIs, Socket.io, Git, Docker.</div>'
+    ],
+    origin: [
+      '<div class="terminal-line">Location: <span class="text-highlight">Odisha, India</span>. Known for ancient stone architecture, gorgeous coastlines, and pristine backend logic.</div>'
+    ],
+    contact: [
+      '<div class="terminal-line">Email: <span class="text-highlight">priyampratyushpanda@gmail.com</span></div>',
+      '<div class="terminal-line">GitHub: <a href="https://github.com/Priyam-SE" target="_blank" style="color: var(--term-highlight); text-decoration: underline;">github.com/Priyam-SE</a></div>'
+    ],
+    whoami: [
+      '<div class="terminal-line">guest_user_xyz</div>'
+    ],
+    sudo: [
+      '<div class="terminal-line text-error">Permission denied. This incident will be reported.</div>'
+    ]
   };
 
-  input.addEventListener('keydown', (e) => {
+  async function typeOutLine(htmlString, parent) {
+    const line = document.createElement('div');
+    line.className = 'terminal-line typing-fx';
+    parent.appendChild(line);
+    
+    // Auto scroll as line is added
+    const body = document.getElementById('terminal-body');
+    if (body) body.scrollTop = body.scrollHeight;
+
+    // Simple hack to type text but inject html quickly
+    // For a real parser we'd need to handle tags, but we will just type text content and then snap to HTML, 
+    // or type text and render tags instantly.
+    
+    let isTag = false;
+    let currentHTML = "";
+    
+    for (let i = 0; i < htmlString.length; i++) {
+      const char = htmlString[i];
+      if (char === '<') isTag = true;
+      currentHTML += char;
+      if (char === '>') isTag = false;
+      
+      line.innerHTML = currentHTML + (i < htmlString.length - 1 ? '<span style="opacity: 0.5">█</span>' : '');
+      
+      if (!isTag) {
+        await new Promise(r => setTimeout(r, 15)); // typing speed
+        if (body) body.scrollTop = body.scrollHeight;
+      }
+    }
+    line.innerHTML = htmlString;
+  }
+
+  input.addEventListener('keydown', async (e) => {
     if (e.key === 'Enter') {
       const rawCmd = input.value.trim();
       const cmd = rawCmd.toLowerCase();
       input.value = '';
+      input.parentElement.style.setProperty('--caret-pos', 0);
 
       if (cmd === '') return;
 
@@ -359,42 +424,26 @@ function initTerminalWidget() {
       promptLine.innerHTML = `<span class="terminal-prompt">priyam-se:~$</span> ${rawCmd}`;
       history.appendChild(promptLine);
 
-      // Execute command response
+      // Disable input during typing
+      input.disabled = true;
+
       if (cmd === 'clear') {
         history.innerHTML = '';
       } else {
-        const responseHTML = commandResponses[cmd] 
-          ? commandResponses[cmd]() 
-          : `<div class="terminal-line text-error">command not found: ${rawCmd}. Type <span class="text-highlight">'help'</span> for instructions.</div>`;
+        const responseLines = commandResponses[cmd] 
+          ? commandResponses[cmd] 
+          : [`<div class="terminal-line text-error">command not found: ${rawCmd}. Type <span class="text-highlight">'help'</span> for instructions.</div>`];
         
-        // Create a temporary container to parse the HTML lines
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = responseHTML;
-        
-        const lines = Array.from(tempDiv.children);
-        
-        // Append each line with a staggered delay for a "typing/processing" feel
-        lines.forEach((line, index) => {
-          line.style.opacity = '0';
-          line.style.transform = 'translateX(-10px)';
-          line.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-          history.appendChild(line);
-          
-          setTimeout(() => {
-            line.style.opacity = '1';
-            line.style.transform = 'translateX(0)';
-            // Auto scroll as lines appear
-            const body = document.getElementById('terminal-body');
-            if (body) body.scrollTop = body.scrollHeight;
-          }, index * 120 + 50); // Stagger by 120ms
-        });
+        for (const lineHTML of responseLines) {
+          await typeOutLine(lineHTML, history);
+        }
       }
 
-      // Auto scroll
+      input.disabled = false;
+      input.focus();
+      
       const body = document.getElementById('terminal-body');
-      if (body) {
-        body.scrollTop = body.scrollHeight;
-      }
+      if (body) body.scrollTop = body.scrollHeight;
     }
   });
 }
@@ -474,5 +523,27 @@ function initContactFormConsole() {
       errorLine.innerHTML = `> Connection failed: Could not reach backend server. Make sure Node.js server is running.`;
       consoleLog.appendChild(errorLine);
     }
+  });
+}
+
+/**
+ * Magnetic Buttons Interaction
+ */
+function initMagneticButtons() {
+  const magnets = document.querySelectorAll('.btn');
+  magnets.forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      
+      // Reduce magnetic pull for subtleness
+      btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px) scale(1.02)`;
+    });
+    
+    btn.addEventListener('mouseleave', () => {
+      // Reset is handled gracefully via CSS transition
+      btn.style.transform = '';
+    });
   });
 }

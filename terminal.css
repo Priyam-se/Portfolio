@@ -1,0 +1,183 @@
+/* Hyper-Premium Terminal Widget CSS */
+:root {
+  --term-bg: rgba(10, 10, 12, 0.7);
+  --term-border: rgba(255, 255, 255, 0.08);
+  --term-glow: rgba(0, 255, 170, 0.15);
+  --term-text: #e0e0e0;
+  --term-highlight: #00ffaa;
+  --term-error: #ff4757;
+  --term-prompt: #a29bfe;
+}
+
+.visual-card {
+  background: var(--term-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--term-border);
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 
+              0 0 0 1px inset rgba(255, 255, 255, 0.05),
+              0 0 30px var(--term-glow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease;
+  position: relative;
+  z-index: 10;
+}
+
+.visual-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.visual-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 
+              0 0 0 1px inset rgba(255, 255, 255, 0.1),
+              0 0 40px rgba(0, 255, 170, 0.25);
+}
+
+.visual-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid var(--term-border);
+  gap: 8px;
+}
+
+.visual-header .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.visual-header .dot:hover {
+  transform: scale(1.2);
+}
+
+.visual-header .dot.red { background: #ff5f56; box-shadow: 0 0 8px #ff5f56; }
+.visual-header .dot.yellow { background: #ffbd2e; box-shadow: 0 0 8px #ffbd2e; }
+.visual-header .dot.green { background: #27c93f; box-shadow: 0 0 8px #27c93f; }
+
+.visual-terminal {
+  flex: 1;
+  padding: 20px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--term-text);
+  overflow-y: auto;
+  max-height: 350px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--term-highlight) transparent;
+  cursor: text;
+}
+
+.visual-terminal::-webkit-scrollbar {
+  width: 6px;
+}
+.visual-terminal::-webkit-scrollbar-thumb {
+  background: var(--term-highlight);
+  border-radius: 3px;
+}
+
+.terminal-line {
+  margin-bottom: 6px;
+  word-wrap: break-word;
+  animation: terminalFadeIn 0.3s ease forwards;
+}
+
+.terminal-line.text-system {
+  color: #888;
+  font-style: italic;
+}
+
+.terminal-line.text-error {
+  color: var(--term-error);
+  text-shadow: 0 0 8px rgba(255, 71, 87, 0.4);
+}
+
+.text-highlight {
+  color: var(--term-highlight);
+  text-shadow: 0 0 8px rgba(0, 255, 170, 0.4);
+  font-weight: 600;
+}
+
+.terminal-prompt {
+  color: var(--term-prompt);
+  margin-right: 8px;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(162, 155, 254, 0.4);
+}
+
+.terminal-input-line {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  position: relative;
+}
+
+#terminal-input {
+  background: transparent;
+  border: none;
+  color: var(--term-text);
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+  flex: 1;
+  outline: none;
+  caret-color: transparent; /* We will use a custom block cursor */
+}
+
+/* Custom Block Cursor */
+.terminal-input-line::after {
+  content: '█';
+  position: absolute;
+  left: calc(var(--caret-pos, 0) * 1ch + 105px); /* dynamically updated via JS */
+  color: var(--term-highlight);
+  animation: blink 1s step-start infinite;
+  pointer-events: none;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@keyframes terminalFadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Typing effect class applied from JS */
+.typing-fx {
+  display: inline-block;
+  overflow: hidden;
+  white-space: pre-wrap;
+}
+
+/* CRT Scanline effect */
+.visual-card::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.1) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0.4;
+}

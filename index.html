@@ -3,7 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Portfolio of Priyam - MERN Stack Developer. Crafting robust, scalable web applications and clean user experiences.">
+  <meta name="description" content="Portfolio of Priyam - Full Stack MERN Developer. Crafting robust, scalable web applications, secure APIs, and clean user experiences.">
+  <meta name="keywords" content="MERN Stack Developer, Full Stack Developer, React.js, Node.js, Express.js, MongoDB, Web Development, Portfolio">
+  <meta name="author" content="Priyam">
+  
+  <!-- Open Graph / Social Media Meta Tags -->
+  <meta property="og:title" content="Priyam | MERN Stack Developer">
+  <meta property="og:description" content="Portfolio of Priyam - Full Stack MERN Developer. Crafting robust, scalable web applications, secure APIs, and clean user experiences.">
+  <meta property="og:type" content="website">
+  
   <title>Priyam | MERN Stack Developer</title>
   
   <!-- Google Fonts -->
@@ -11,8 +19,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   
-  <!-- CSS Stylesheet -->
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="theme.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="terminal.css">
+  <link rel="stylesheet" href="animations.css">
+  <link rel="stylesheet" href="hero.css">
 </head>
 <body>
 
@@ -26,7 +38,7 @@
       <a href="#" class="logo">
         <span class="logo-accent">&lt;</span>Priyam<span class="logo-accent">/&gt;</span>
       </a>
-      <nav class="nav-links">
+      <nav class="nav-links" aria-label="Primary Navigation">
         <a href="#hero" class="nav-link active">Home</a>
         <a href="#works" class="nav-link">Works</a>
         <a href="#about" class="nav-link">About</a>
@@ -43,7 +55,7 @@
 
   <!-- Mobile Navigation Menu -->
   <div class="mobile-menu" id="mobile-menu">
-    <nav class="mobile-nav-links">
+    <nav class="mobile-nav-links" aria-label="Mobile Navigation">
       <a href="#hero" class="mobile-link">Home</a>
       <a href="#works" class="mobile-link">Works</a>
       <a href="#about" class="mobile-link">About</a>
@@ -86,9 +98,9 @@
     </section>
 
     <!-- Works Section -->
-    <section id="works" class="section works-section">
+    <section id="works" class="section works-section" aria-labelledby="works-title">
       <div class="section-header reveal">
-        <h2 class="section-title">Selected Works</h2>
+        <h2 id="works-title" class="section-title">Selected Works</h2>
         <p class="section-subtitle">A showcase of full-stack engineering and custom MERN applications.</p>
       </div>
 
@@ -148,10 +160,10 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="section about-section">
+    <section id="about" class="section about-section" aria-labelledby="about-title">
       <div class="about-container">
         <div class="about-text reveal">
-          <h2 class="section-title">The Engineer behind the Code</h2>
+          <h2 id="about-title" class="section-title">The Engineer behind the Code</h2>
           <p class="about-paragraph highlight">
             I design web applications unified from user interface to database schema.
           </p>
@@ -192,9 +204,9 @@
     </section>
 
     <!-- Skills Codex Section -->
-    <section id="skills" class="section skills-section">
+    <section id="skills" class="section skills-section" aria-labelledby="skills-title">
       <div class="section-header reveal">
-        <h2 class="section-title">The Codex</h2>
+        <h2 id="skills-title" class="section-title">The Codex</h2>
         <p class="section-subtitle">Proficiencies aligned across full-stack development technologies.</p>
       </div>
 
@@ -290,10 +302,10 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="section contact-section">
+    <section id="contact" class="section contact-section" aria-labelledby="contact-title">
       <div class="contact-container reveal">
         <div class="contact-info">
-          <h2 class="section-title">Communicate</h2>
+          <h2 id="contact-title" class="section-title">Communicate</h2>
           <p class="contact-desc">
             Want to collaborate on a full-stack MERN application, discuss API structures, or simply connect? Send a transmission.
           </p>

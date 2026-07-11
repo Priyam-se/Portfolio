@@ -1,0 +1,26 @@
+:root {
+  /* Typography */
+  --font-primary: 'Inter', sans-serif;
+  --font-secondary: 'Outfit', sans-serif;
+
+  /* Dark Mode Palette */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #171717;
+  --text-primary: #ededed;
+  --text-secondary: #a3a3a3;
+  --accent-primary: #3b82f6; /* Example blue */
+  --accent-secondary: #1d4ed8;
+  --border-color: #262626;
+  --success-color: #22c55e;
+  --error-color: #ef4444;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-secondary);
+}
