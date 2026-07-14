@@ -15,19 +15,44 @@ document.addEventListener('DOMContentLoaded', () => {
  * Custom Cursor Glow Tracking
  */
 function initCustomCursor() {
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
   const cursor = document.getElementById('custom-cursor');
   const glow = document.getElementById('custom-cursor-glow');
   
   if (!cursor || !glow) return;
 
-  window.addEventListener('mousemove', (e) => {
-    cursor.style.left = `${e.clientX}px`;
-    cursor.style.top = `${e.clientY}px`;
+  let cursorX = 0;
+  let cursorY = 0;
+  let isTicking = false;
+  
+  // Custom cursor trail for the glow
+  let glowX = 0;
+  let glowY = 0;
+
+  function updateCursor() {
+    cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
     
-    glow.animate({
-      left: `${e.clientX}px`,
-      top: `${e.clientY}px`
-    }, { duration: 500, fill: 'forwards' });
+    // Smooth trailing effect for the glow
+    glowX += (cursorX - glowX) * 0.15;
+    glowY += (cursorY - glowY) * 0.15;
+    glow.style.transform = `translate3d(${glowX}px, ${glowY}px, 0) translate(-50%, -50%)`;
+    
+    if (Math.abs(cursorX - glowX) > 0.1 || Math.abs(cursorY - glowY) > 0.1) {
+      requestAnimationFrame(updateCursor);
+    } else {
+      isTicking = false;
+    }
+  }
+
+  window.addEventListener('mousemove', (e) => {
+    cursorX = e.clientX;
+    cursorY = e.clientY;
+    
+    if (!isTicking) {
+      isTicking = true;
+      requestAnimationFrame(updateCursor);
+    }
   });
 
   const interactives = document.querySelectorAll('a, button, input, textarea, .work-card, #terminal-widget');
@@ -52,7 +77,7 @@ function initTypewriter() {
 
   const cursorSpan = document.createElement('span');
   cursorSpan.classList.add('typewriter-cursor');
-  cursorSpan.textContent = '|';
+  // textContent removed to use CSS block cursor instead of character
   element.parentNode.insertBefore(cursorSpan, element.nextSibling);
 
   function type() {
@@ -112,33 +137,51 @@ function initMobileMenu() {
  * Card Spotlight Mouse Glow effect
  */
 function initCardSpotlight() {
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
   const cards = document.querySelectorAll('.work-card');
   
   cards.forEach(card => {
+    const cardInner = card.querySelector('.work-card-inner');
+    if (!cardInner) return;
+
+    let isTicking = false;
+
     card.addEventListener('mousemove', (e) => {
+      // Read phase
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       
-      card.style.setProperty('--x', `${x}px`);
-      card.style.setProperty('--y', `${y}px`);
-      
-      // 3D Tilt calculation
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      const rotateX = ((y - centerY) / centerY) * -5; // max 5deg tilt
-      const rotateY = ((x - centerX) / centerX) * 5; // max 5deg tilt
-      
-      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale3d(1.02, 1.02, 1.02)`;
+      if (!isTicking) {
+        isTicking = true;
+        // Write phase
+        requestAnimationFrame(() => {
+          card.style.setProperty('--x', `${x}px`);
+          card.style.setProperty('--y', `${y}px`);
+          
+          // 3D Tilt calculation
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = ((y - centerY) / centerY) * -5; // max 5deg tilt
+          const rotateY = ((x - centerX) / centerX) * 5; // max 5deg tilt
+          
+          cardInner.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale3d(1.02, 1.02, 1.02)`;
+          
+          isTicking = false;
+        });
+      }
     });
     
     card.addEventListener('mouseleave', () => {
-      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale3d(1, 1, 1)`;
-      card.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)';
+      cardInner.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale3d(1, 1, 1)`;
+      // Restore all transitions to prevent snapping
+      cardInner.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
     });
     
     card.addEventListener('mouseenter', () => {
-      card.style.transition = 'none'; // Disable transition for 1:1 mouse tracking
+      // Keep hover transitions intact, add tiny smoothing to transform to eliminate jitter
+      cardInner.style.transition = 'transform 0.1s ease-out, box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
     });
   });
 }

@@ -79,10 +79,13 @@ body::-webkit-scrollbar-thumb:hover {
     background-color: var(--accent-primary);
     border-radius: 50%;
     position: fixed;
+    left: 0;
+    top: 0;
     transform: translate(-50%, -50%);
     pointer-events: none;
     z-index: 9999;
-    transition: width 0.2s, height 0.2s;
+    transition: width 0.2s, height 0.2s, background-color 0.2s, border 0.2s;
+    will-change: transform, width, height;
   }
   .custom-cursor-glow {
     width: 250px;
@@ -90,9 +93,12 @@ body::-webkit-scrollbar-thumb:hover {
     background: radial-gradient(circle, rgba(212, 140, 106, 0.05) 0%, rgba(212, 140, 106, 0) 70%);
     border-radius: 50%;
     position: fixed;
+    left: 0;
+    top: 0;
     transform: translate(-50%, -50%);
     pointer-events: none;
     z-index: 9998;
+    will-change: transform;
   }
   .custom-cursor.active {
     width: 20px;
@@ -162,10 +168,13 @@ body::-webkit-scrollbar-thumb:hover {
   position: absolute;
   bottom: -4px;
   left: 0;
-  width: 0;
+  width: 100%;
   height: 1.5px;
   background-color: var(--accent-primary);
-  transition: width var(--transition-normal);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-normal);
+  will-change: transform;
 }
 
 .nav-link:hover, .nav-link.active {
@@ -173,7 +182,7 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .nav-link:hover::after, .nav-link.active::after {
-  width: 100%;
+  transform: scaleX(1);
 }
 
 /* Mobile Toggle */
@@ -450,20 +459,28 @@ body::-webkit-scrollbar-thumb:hover {
 
 /* Work Cards */
 .work-card {
+  position: relative;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.work-card-inner {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 8px;
   padding: 2.25rem;
   position: relative;
   overflow: hidden;
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+  transition: transform var(--transition-normal), border-color var(--transition-normal);
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   transform-style: preserve-3d;
   will-change: transform;
 }
 
-.work-card::before {
+.work-card-inner::before {
   content: '';
   position: absolute;
   top: 0;
@@ -475,9 +492,28 @@ body::-webkit-scrollbar-thumb:hover {
   z-index: 1;
 }
 
-.work-card:hover {
-  border-color: var(--card-border-hover);
+.work-card-inner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(212, 140, 106, 0.1) inset;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (hover: hover) {
+  .work-card:hover .work-card-inner {
+    border-color: var(--card-border-hover);
+  }
+  .work-card:hover .work-card-inner::after {
+    opacity: 1;
+  }
 }
 
 .card-glow {
@@ -496,6 +532,10 @@ body::-webkit-scrollbar-thumb:hover {
   height: 100%;
   display: flex;
   flex-direction: column;
+  transform: translateZ(1px);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  backface-visibility: hidden;
 }
 
 .card-meta {
@@ -1044,9 +1084,11 @@ body::-webkit-scrollbar-thumb:hover {
 
 .typewriter-cursor {
   display: inline-block;
-  width: 2px;
+  width: 10px;
+  height: 1.1em;
   background-color: var(--accent-primary);
   margin-left: 4px;
+  vertical-align: text-bottom;
   animation: blink 0.8s infinite;
 }
 

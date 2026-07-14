@@ -106,7 +106,7 @@
   transform-style: preserve-3d;
 }
 
-#works .work-card {
+#works .work-card-inner {
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
@@ -117,7 +117,7 @@
   transform: perspective(1200px) translateZ(0);
 }
 
-#works .work-card:hover {
+#works .work-card:hover .work-card-inner {
   transform: perspective(1200px) translateY(-15px) rotateX(4deg) rotateY(-4deg) translateZ(30px);
   box-shadow: -20px 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.25);
