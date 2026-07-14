@@ -52,7 +52,7 @@ function initCustomCursor() {
       isTicking = true;
       requestAnimationFrame(updateCursor);
     }
-  });
+  }, { passive: true });
 
   const interactives = document.querySelectorAll('a, button, input, textarea, .work-card, #terminal-widget');
   interactives.forEach(el => {
@@ -141,13 +141,28 @@ function initCardSpotlight() {
   const cards = document.querySelectorAll('.work-card');
   
   cards.forEach(card => {
+    const inner = card.querySelector('.work-card-inner');
     let isTicking = false;
 
+    card.addEventListener('mouseenter', () => {
+      if (inner) {
+        // Disable transform transition for instant mouse tracking, keep others
+        inner.style.transition = 'border-color var(--transition-normal), box-shadow var(--transition-normal)';
+      }
+    });
+
     card.addEventListener('mousemove', (e) => {
-      // Read phase
+      // Read phase on the non-moving container (.work-card) to avoid feedback loops
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      // Calculate 3D tilt angles (max 10 degrees)
+      const rotateX = ((y - centerY) / centerY) * -10;
+      const rotateY = ((x - centerX) / centerX) * 10;
       
       if (!isTicking) {
         isTicking = true;
@@ -155,8 +170,21 @@ function initCardSpotlight() {
         requestAnimationFrame(() => {
           card.style.setProperty('--x', `${x}px`);
           card.style.setProperty('--y', `${y}px`);
+          
+          if (inner) {
+            // Include translateY(-5px) to preserve hover lift from CSS
+            inner.style.transform = `perspective(1000px) translateY(-5px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+          }
           isTicking = false;
         });
+      }
+    }, { passive: true });
+    
+    card.addEventListener('mouseleave', () => {
+      if (inner) {
+        // Reset to CSS transition and clear inline transform
+        inner.style.transition = '';
+        inner.style.transform = '';
       }
     });
   });
@@ -171,10 +199,11 @@ function initScrollAnimations() {
   const navLinks = document.querySelectorAll('.nav-link');
   const progressBars = document.querySelectorAll('.skill-progress');
 
-  const revealObserver = new IntersectionObserver((entries) => {
+  const revealObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('active');
+        observer.unobserve(entry.target);
       }
     });
   }, { threshold: 0.15 });
@@ -431,17 +460,35 @@ function initContactFormConsole() {
 function initMagneticButtons() {
   const magnets = document.querySelectorAll('.btn');
   magnets.forEach(btn => {
+    let rect = null;
+    let isTicking = false;
+
+    btn.addEventListener('mouseenter', () => {
+      // Cache bounding rect on enter to avoid layout thrashing during mousemove
+      rect = btn.getBoundingClientRect();
+      btn.style.transition = 'none'; // disable CSS transition during mouse tracking
+    });
+
     btn.addEventListener('mousemove', (e) => {
-      const rect = btn.getBoundingClientRect();
+      if (!rect) return;
+      
       const x = e.clientX - rect.left - rect.width / 2;
       const y = e.clientY - rect.top - rect.height / 2;
       
-      // Reduce magnetic pull for subtleness
-      btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px) scale(1.02)`;
-    });
+      if (!isTicking) {
+        isTicking = true;
+        requestAnimationFrame(() => {
+          // Reduce magnetic pull for subtleness
+          btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px) scale(1.02)`;
+          isTicking = false;
+        });
+      }
+    }, { passive: true });
     
     btn.addEventListener('mouseleave', () => {
+      rect = null;
       // Reset is handled gracefully via CSS transition
+      btn.style.transition = '';
       btn.style.transform = '';
     });
   });
