@@ -11,9 +11,7 @@
   
   /* Accent Colors */
   --accent-primary: #d48c6a;       /* Warm caramel / terracotta */
-  --accent-primary-rgb: 212, 140, 106;
   --accent-secondary: #8b9c8c;     /* Muted sage green */
-  --accent-secondary-rgb: 139, 156, 140;
   
   /* Cards & Glassmorphism */
   --card-bg: rgba(22, 19, 17, 0.6);
@@ -30,7 +28,6 @@
   /* Transition Speeds */
   --transition-fast: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* --- Base & Scroll Reset --- */
@@ -476,6 +473,7 @@ body::-webkit-scrollbar-thumb:hover {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  will-change: transform;
 }
 
 @media (hover: hover) {
