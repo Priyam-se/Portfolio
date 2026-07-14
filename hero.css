@@ -8,44 +8,14 @@
   --glass-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* 2. Hero Section 3D Container */
+/* 2. Hero Section */
 #hero.hero-section {
-  perspective: 1200px;
-  transform-style: preserve-3d;
+  /* Clean */
 }
 
-/* 3. Hero Content Glassmorphism & 3D */
+/* 3. Hero Content */
 #hero .hero-content {
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
-  padding: 3.5rem;
-  box-shadow: var(--glass-shadow);
-  transform-style: preserve-3d;
-  transform: translateZ(20px);
-  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s ease;
   position: relative;
-}
-
-#hero .hero-content:hover {
-  transform: translateZ(40px) translateY(-5px);
-  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-/* Text pop out in 3D */
-#hero .hero-title, 
-#hero .hero-intro, 
-#hero .hero-subtitle {
-  transform: translateZ(40px);
-  text-shadow: 0 10px 20px rgba(0,0,0,0.3);
-  will-change: transform;
-}
-
-#hero .hero-ctas {
-  transform: translateZ(50px);
-  transform-style: preserve-3d;
 }
 
 /* Dynamic Glowing Mesh Background */
@@ -54,34 +24,25 @@
   height: 70vw;
   max-width: 800px;
   max-height: 800px;
-  background: radial-gradient(circle, rgba(138, 43, 226, 0.12) 0%, rgba(212, 140, 106, 0.12) 40%, rgba(0, 0, 0, 0) 70%);
+  background: radial-gradient(circle, rgba(212, 140, 106, 0.08) 0%, rgba(0, 0, 0, 0) 60%);
   filter: blur(60px);
-  animation: liquid-glow 10s infinite alternate ease-in-out;
-  transform: translate(-50%, -50%) translateZ(-100px); /* Push background back */
+  transform: translate(-50%, -50%);
   pointer-events: none;
 }
 
-@keyframes liquid-glow {
-  0% { transform: translate(-50%, -50%) translateZ(-100px) scale(1) rotate(0deg); }
-  50% { transform: translate(-45%, -55%) translateZ(-100px) scale(1.1) rotate(15deg); }
-  100% { transform: translate(-50%, -45%) translateZ(-100px) scale(1) rotate(-15deg); }
-}
-
-/* Call to action premium styling with 3D pop */
+/* Call to action premium styling */
 #hero .btn-primary {
-  background: linear-gradient(135deg, var(--accent-primary) 0%, #ffb894 100%);
+  background: var(--accent-primary);
   border: none;
-  box-shadow: 0 15px 25px rgba(212, 140, 106, 0.25);
   position: relative;
   overflow: hidden;
   color: var(--bg-deep);
-  transform: translateZ(10px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 #hero .btn-primary:hover {
-  transform: translateZ(20px) scale(1.05);
-  box-shadow: 0 20px 35px rgba(212, 140, 106, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(212, 140, 106, 0.2);
 }
 
 #hero .btn-primary::after {
@@ -97,57 +58,4 @@
   left: 150%;
 }
 
-/* 4. Works Section Glassmorphism & 3D */
-#works.works-section {
-  perspective: 1500px;
-}
 
-#works .works-grid {
-  transform-style: preserve-3d;
-}
-
-#works .work-card-inner {
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  transform-style: preserve-3d;
-  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-  transform: perspective(1200px) translateZ(0);
-}
-
-#works .work-card:hover .work-card-inner {
-  transform: perspective(1200px) translateY(-15px) rotateX(4deg) rotateY(-4deg) translateZ(30px);
-  box-shadow: -20px 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.06);
-}
-
-#works .card-content {
-  transform-style: preserve-3d;
-  transform: translateZ(30px);
-  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-#works .work-card:hover .card-content {
-  transform: translateZ(50px);
-}
-
-/* Staggered 3D popping elements inside cards */
-#works .card-meta {
-  transform: translateZ(20px);
-}
-
-#works .card-title {
-  transform: translateZ(40px);
-  text-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-
-#works .card-description {
-  transform: translateZ(30px);
-}
-
-#works .card-links {
-  transform: translateZ(45px);
-}

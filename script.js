@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   initCardSpotlight();
   initScrollAnimations();
-  initParticleCanvas();
   initTerminalWidget();
   initContactFormConsole();
   initMagneticButtons();
@@ -142,9 +141,6 @@ function initCardSpotlight() {
   const cards = document.querySelectorAll('.work-card');
   
   cards.forEach(card => {
-    const cardInner = card.querySelector('.work-card-inner');
-    if (!cardInner) return;
-
     let isTicking = false;
 
     card.addEventListener('mousemove', (e) => {
@@ -159,29 +155,9 @@ function initCardSpotlight() {
         requestAnimationFrame(() => {
           card.style.setProperty('--x', `${x}px`);
           card.style.setProperty('--y', `${y}px`);
-          
-          // 3D Tilt calculation
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          const rotateX = ((y - centerY) / centerY) * -5; // max 5deg tilt
-          const rotateY = ((x - centerX) / centerX) * 5; // max 5deg tilt
-          
-          cardInner.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale3d(1.02, 1.02, 1.02)`;
-          
           isTicking = false;
         });
       }
-    });
-    
-    card.addEventListener('mouseleave', () => {
-      cardInner.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale3d(1, 1, 1)`;
-      // Restore all transitions to prevent snapping
-      cardInner.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-    });
-    
-    card.addEventListener('mouseenter', () => {
-      // Keep hover transitions intact, add tiny smoothing to transform to eliminate jitter
-      cardInner.style.transition = 'transform 0.1s ease-out, box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
     });
   });
 }
@@ -249,126 +225,6 @@ function initScrollAnimations() {
   }
 }
 
-/**
- * Dynamic Interactive Particle Canvas
- */
-function initParticleCanvas() {
-  const canvas = document.getElementById('particle-canvas');
-  if (!canvas) return;
-
-  const ctx = canvas.getContext('2d');
-  let animationFrameId;
-
-  // Track size
-  function resize() {
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  const particles = [];
-  const particleCount = 45;
-  const connectionDistance = 110;
-  const mouse = { x: null, y: null, radius: 150 };
-
-  // Mouse move listener
-  window.addEventListener('mousemove', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    mouse.x = e.clientX - rect.left;
-    mouse.y = e.clientY - rect.top;
-  });
-
-  window.addEventListener('mouseleave', () => {
-    mouse.x = null;
-    mouse.y = null;
-  });
-
-  // Construct particle model
-  const colors = ['#d48c6a', '#8b9c8c', '#e2e8f0', '#ffffff'];
-  
-  class Particle {
-    constructor() {
-      this.x = Math.random() * canvas.width;
-      this.y = Math.random() * canvas.height;
-      this.vx = (Math.random() - 0.5) * 0.6;
-      this.vy = (Math.random() - 0.5) * 0.6;
-      this.radius = Math.random() * 2.5 + 1;
-      this.color = colors[Math.floor(Math.random() * colors.length)];
-      this.originalVx = this.vx;
-      this.originalVy = this.vy;
-    }
-
-    update() {
-      this.x += this.vx;
-      this.y += this.vy;
-
-      // Bounce borders
-      if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-      if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-
-      // Mouse warp interaction
-      if (mouse.x !== null && mouse.y !== null) {
-        const dx = this.x - mouse.x;
-        const dy = this.y - mouse.y;
-        const distance = Math.hypot(dx, dy);
-
-        if (distance < mouse.radius) {
-          const force = (mouse.radius - distance) / mouse.radius;
-          // Warp gently towards cursor
-          this.x -= dx * force * 0.03;
-          this.y -= dy * force * 0.03;
-        }
-      }
-    }
-
-    draw() {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fillStyle = this.color;
-      ctx.globalAlpha = 0.6;
-      ctx.fill();
-      ctx.globalAlpha = 1.0;
-    }
-  }
-
-  // Populate particles array
-  for (let i = 0; i < particleCount; i++) {
-    particles.push(new Particle());
-  }
-
-  // Animation cycle
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    for (let i = 0; i < particles.length; i++) {
-      particles[i].update();
-      particles[i].draw();
-
-      // Lines link mesh
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.hypot(dx, dy);
-
-        if (dist < connectionDistance) {
-          const alpha = (connectionDistance - dist) / connectionDistance * 0.25;
-          ctx.strokeStyle = particles[i].color;
-          ctx.globalAlpha = alpha;
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.stroke();
-          ctx.globalAlpha = 1.0;
-        }
-      }
-    }
-
-    animationFrameId = requestAnimationFrame(animate);
-  }
-  animate();
-}
 
 /**
  * About Section Mock Interactive Terminal
